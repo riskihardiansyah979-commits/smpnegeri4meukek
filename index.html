@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi & Manajemen Portal SMPN 4 Meukek</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brand-600 selection:text-white">
+
+    <!-- STORAGE KEYS -->
+    <script>
+        const KEYS = {
+            PROFILE: 'smpn4_profile_v2',
+            NEWS: 'smpn4_news_v2',
+            TEACHERS: 'smpn4_teachers_v2',
+            STUDENTS: 'smpn4_students_v2',
+            PROGRAMS: 'smpn4_programs_v2',
+            FACILITIES: 'smpn4_facilities_v2',
+            PPDB: 'smpn4_ppdb_v2',
+            LIBRARY: 'smpn4_library_v2',
+            LINKS: 'smpn4_links_v2',
+            ADMIN_AUTH: 'smpn4_auth_v2',
+            ADMIN_SESSION: 'smpn4_session_v2'
+        };
+
+        const defaultProfile = {
+            schoolName: 'SMPN 4 Meukek',
+            npsn: '10101234',
+            address: 'Jl. Lintas Meulaboh - Tapaktuan, Kec. Meukek, Kab. Aceh Selatan, Aceh',
+            email: 'admin@smpn4meukek.sch.id',
+            phone: '+62 811-6543-2100',
+            headmasterName: 'Drs. H. M. Jafar, M.Pd.',
+            headmasterPhoto: 'https://placehold.co/400x400/0f172a/ffffff?text=Kepala+Sekolah',
+            welcomeSpeech: 'Assalamu’alaikum Wr. Wb. Selamat datang di portal resmi SMPN 4 Meukek. Kami berkomitmen menyelenggarakan pendidikan berkualitas yang berlandaskan IMTAQ dan IPTEK.',
+            vision: 'Terwujudnya Peserta Didik yang Berakhlak Mulia, Cerdas, Terampil, Mandiri, dan Berwawasan Lingkungan.',
+            mission: '1. Meningkatkan pengamalan ajaran agama dalam kehidupan sehari-hari.\n2. Melaksanakan pembelajaran aktif, inovatif, kreatif, dan menyenangkan.\n3. Mengembangkan potensi seni, olahraga, dan teknologi.\n4. Menjaga kelestarian lingkungan sekolah.',
+            history: 'SMPN 4 Meukek didirikan pada tahun 1994 untuk menjawab kebutuhan pendidikan menengah pertama di kawasan pesisir Kabupaten Aceh Selatan.',
+            logoUrl: 'https://placehold.co/200x200/15803d/ffffff?text=SMPN4',
+            ppdbRequirements: '1. Fotokopi Ijazah / SKL SD/MI yang dilegalisir.\n2. Fotokopi Kartu Keluarga (KK) & Akta Kelahiran.\n3. Pas foto berwarna ukuran 3x4 (3 lembar).'
+        };
+
+        const defaultExternalLinks = [
+            { id: 'lnk-1', title: 'Data Pokok Pendidikan (Dapodik)', url: 'https://dapodik.kemdikbud.go.id', category: 'Pendataan', icon: 'database' },
+            { id: 'lnk-2', title: 'Platform Rapor Kurikulum Merdeka', url: 'https://rapor.kemdikbud.go.id', category: 'Kurikulum', icon: 'book-open' },
+            { id: 'lnk-3', title: 'Dinas Pendidikan Aceh Selatan', url: 'https://disdik.acehselatankab.go.id', category: 'Kedinasan', icon: 'globe' }
+        ];
+
+        const defaultSocialLinks = {
+            tiktok: 'https://tiktok.com/@smpn4meukek',
+            youtube: 'https://youtube.com/@smpn4meukek',
+            instagram: 'https://instagram.com/smpn4meukek'
+        };
+
+        const defaultNews = [
+            { 
+                id: 'news-1', 
+                title: 'Penerimaan Peserta Didik Baru (PPDB) Tahun Ajaran 2026/2027 Resmi Dibuka', 
+                category: 'Pengumuman', 
+                date: '02 Juni 2026', 
+                author: 'Admin Sekolah', 
+                image: 'https://placehold.co/600x400/15803d/ffffff?text=PPDB+2026', 
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                content: 'SMPN 4 Meukek membuka pendaftaran peserta didik baru tahun ajaran 2026/2027. Pendaftaran dapat dilakukan secara online melalui menu PPDB di portal ini atau datang langsung ke sekretariat sekolah.' 
+            },
+            { 
+                id: 'news-2', 
+                title: 'Kegiatan Upacara Bendera Senin & Penyerahan Piala Prestasi Siswa', 
+                category: 'Kegiatan', 
+                date: '28 Mei 2026', 
+                author: 'Tim Humas', 
+                image: 'https://placehold.co/600x400/0f172a/ffffff?text=Upacara+Bendera', 
+                videoUrl: '',
+                content: 'Siswa-siswi SMPN 4 Meukek kembali menorehkan prestasi gemilang pada ajang Olimpiade Sains tingkat Kabupaten Aceh Selatan.' 
+            }
+        ];
+
+        const defaultTeachers = [
+            { id: 'tch-1', name: 'Drs. H. M. Jafar, M.Pd.', nip: '196812121994031001', subject: 'Kepala Sekolah / PPKn', gender: 'L', photo: 'https://placehold.co/300x300/15803d/ffffff?text=Kepala+Sekolah' },
+            { id: 'tch-2', name: 'Siti Aminah, S.Pd.', nip: '197505102000032004', subject: 'Guru Matematika', gender: 'P', photo: 'https://placehold.co/300x300/166534/ffffff?text=Siti+Aminah' },
+            { id: 'tch-3', name: 'Rahmat Hidayat, S.Pd.', nip: '198208152009021002', subject: 'Guru IPA', gender: 'L', photo: 'https://placehold.co/300x300/14532d/ffffff?text=Rahmat' }
+        ];
+
+        const defaultStudents = [
+            { id: 'std-1', nisn: '0091234561', name: 'Cut Alya Zahra', studentClass: 'Kelas 7', gender: 'P', status: 'Aktif', photo: 'https://placehold.co/300x300/e2e8f0/1e293b?text=Alya' },
+            { id: 'std-2', nisn: '0089876542', name: 'Muhammad Al Fath', studentClass: 'Kelas 8', gender: 'L', status: 'Aktif', photo: 'https://placehold.co/300x300/e2e8f0/1e293b?text=Fath' },
+            { id: 'std-3', nisn: '0071122334', name: 'Zulfa Maisarah', studentClass: 'Kelas 9', gender: 'P', status: 'Aktif', photo: 'https://placehold.co/300x300/e2e8f0/1e293b?text=Zulfa' }
+        ];
+
+        let profileData = {}, appNews = [], appTeachers = [], appStudents = [], appPrograms = [], appFacilities = [], appPpdb = [], appLibrary = [], appLinks = [], socialLinks = {};
+        let currentAdmin = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initStorage();
+            loadState();
+            renderAllPublicContent();
+            if (window.lucide) lucide.createIcons();
+        });
+
+        function initStorage() {
+            if (!localStorage.getItem(KEYS.PROFILE)) localStorage.setItem(KEYS.PROFILE, JSON.stringify(defaultProfile));
+            if (!localStorage.getItem(KEYS.NEWS)) localStorage.setItem(KEYS.NEWS, JSON.stringify(defaultNews));
+            if (!localStorage.getItem(KEYS.TEACHERS)) localStorage.setItem(KEYS.TEACHERS, JSON.stringify(defaultTeachers));
+            if (!localStorage.getItem(KEYS.STUDENTS)) localStorage.setItem(KEYS.STUDENTS, JSON.stringify(defaultStudents));
+            if (!localStorage.getItem(KEYS.LINKS)) localStorage.setItem(KEYS.LINKS, JSON.stringify(defaultExternalLinks));
+            if (!localStorage.getItem('smpn4_social_v2')) localStorage.setItem('smpn4_social_v2', JSON.stringify(defaultSocialLinks));
+            if (!localStorage.getItem(KEYS.ADMIN_AUTH)) {
+                localStorage.setItem(KEYS.ADMIN_AUTH, JSON.stringify({ 
+                    username: 'admin', 
+                    password: 'admin123', 
+                    email: 'admin@smpn4meukek.sch.id',
+                    showLoginButton: true 
+                }));
+            }
+        }
+
+        function loadState() {
+            profileData = JSON.parse(localStorage.getItem(KEYS.PROFILE)) || defaultProfile;
+            appNews = JSON.parse(localStorage.getItem(KEYS.NEWS)) || defaultNews;
+            appTeachers = JSON.parse(localStorage.getItem(KEYS.TEACHERS)) || defaultTeachers;
+            appStudents = JSON.parse(localStorage.getItem(KEYS.STUDENTS)) || defaultStudents;
+            appPpdb = JSON.parse(localStorage.getItem(KEYS.PPDB)) || [];
+            appLibrary = JSON.parse(localStorage.getItem(KEYS.LIBRARY)) || [];
+            appLinks = JSON.parse(localStorage.getItem(KEYS.LINKS)) || defaultExternalLinks;
+            socialLinks = JSON.parse(localStorage.getItem('smpn4_social_v2')) || defaultSocialLinks;
+            
+            // Check visibility of public login button
+            const authData = JSON.parse(localStorage.getItem(KEYS.ADMIN_AUTH)) || {};
+            const loginBtnContainer = document.getElementById('loginBtnContainer');
+            const mobileLoginContainer = document.getElementById('mobileLoginContainer');
+            if(loginBtnContainer && mobileLoginContainer) {
+                if(authData.showLoginButton === false) {
+                    loginBtnContainer.classList.add('hidden');
+                    mobileLoginContainer.classList.add('hidden');
+                } else {
+                    loginBtnContainer.classList.remove('hidden');
+                    mobileLoginContainer.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 max-w-md">
+        <div id="toastBox" class="bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700">
+            <i id="toastIcon" data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+            <span id="toastMessage" class="text-sm font-medium">Pemberitahuan sistem</span>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI HAPUS -->
+    <div id="deleteModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 text-center space-y-4">
+            <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Konfirmasi Hapus Data</h3>
+            <p id="deleteModalText" class="text-sm text-slate-600">Apakah Anda yakin ingin menghapus data ini secara permanen?</p>
+            <div class="flex justify-center gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-lg shadow">Hapus Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN ADMIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div class="bg-slate-900 px-6 py-5 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i data-lucide="lock" class="w-5 h-5 text-brand-600"></i> Portal Login Admin</h3>
+                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Username Admin</label>
+                    <input type="text" id="loginUsername" required placeholder="Masukkan username..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Masukkan password..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                    <button type="button" onclick="openForgotPasswordModal()" class="text-brand-700 hover:underline font-semibold">Lupa Password Admin?</button>
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg shadow-md transition">Masuk Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LUPA PASSWORD MODAL -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2"><i data-lucide="key" class="w-5 h-5 text-brand-600"></i> Pemulihan Password Admin</h3>
+                <button onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <p class="text-xs text-slate-600">Masukkan alamat email pemulihan yang terdaftar di sistem admin untuk mengirimkan instruksi reset password.</p>
+            <form onsubmit="handleForgotPassword(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email Pemulihan</label>
+                    <input type="email" id="forgotEmailInput" required placeholder="admin@smpn4meukek.sch.id" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm shadow">Kirim Instruksi Reset</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PUBLIC NAVIGATION -->
+    <header id="publicHeader" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('beranda')">
+                <img id="navLogoImg" src="" alt="Logo" class="h-12 w-12 object-contain rounded-full bg-slate-100 p-1 border">
+                <div>
+                    <span id="navSchoolName" class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight leading-none block">SMPN 4 Meukek</span>
+                    <span class="text-xs text-brand-700 font-semibold mt-1 block">Portal Resmi Sekolah Profesional</span>
+                </div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden xl:flex items-center gap-2">
+                <button onclick="showSection('beranda')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Beranda</button>
+                <button onclick="showSection('profil')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Profil</button>
+                <button onclick="showSection('ppdb')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition border border-emerald-200 flex items-center gap-1"><i data-lucide="user-plus" class="w-3.5 h-3.5"></i> PPDB Online</button>
+                <button onclick="showSection('guru')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Guru & Staff</button>
+                <button onclick="showSection('siswa')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Data Siswa</button>
+                <button onclick="showSection('perpustakaan')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">E-Library</button>
+                <button onclick="showSection('berita')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Berita & Galeri</button>
+                <button onclick="showSection('statistik')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Statistik</button>
+                <button onclick="showSection('tautan')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Tautan Lain</button>
+                <button onclick="showSection('kontak')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Kontak</button>
+            </nav>
+
+            <div class="hidden xl:flex items-center gap-3">
+                <div id="loginBtnContainer">
+                    <button onclick="openLoginModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg shadow flex items-center gap-2">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-brand-400"></i> Login Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden xl:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-2">
+            <button onclick="showSection('beranda'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Beranda</button>
+            <button onclick="showSection('profil'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Profil Sekolah</button>
+            <button onclick="showSection('ppdb'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-bold text-emerald-700 bg-emerald-50 text-sm">PPDB Online</button>
+            <button onclick="showSection('guru'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Guru & Staff</button>
+            <button onclick="showSection('siswa'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Data Siswa</button>
+            <button onclick="showSection('perpustakaan'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">E-Library</button>
+            <button onclick="showSection('berita'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Berita & Galeri</button>
+            <button onclick="showSection('statistik'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Statistik Layanan</button>
+            <button onclick="showSection('tautan'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Tautan & Media Sosial</button>
+            <button onclick="showSection('kontak'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg font-medium text-slate-700 hover:bg-slate-100 text-sm">Kontak</button>
+            <div id="mobileLoginContainer" class="pt-3 border-t border-slate-100">
+                <button onclick="openLoginModal(); toggleMobileMenu()" class="w-full py-2.5 bg-slate-900 text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2">
+                    <i data-lucide="lock" class="w-4 h-4"></i> Login Admin
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- PUBLIC CONTENT CONTAINER -->
+    <main id="publicContent" class="flex-grow">
+        <!-- SECTION: BERANDA -->
+        <section id="sec-beranda" class="public-section">
+            <!-- Hero -->
+            <div class="relative bg-gradient-to-r from-navy-900 via-brand-900 to-brand-800 text-white py-20 lg:py-28 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-bold uppercase tracking-wider inline-block">
+                            ✨ Portal Resmi Pendidikan Berkualitas
+                        </span>
+                        <h1 id="heroTitle" class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                            Selamat Datang di Portal SMPN 4 Meukek
+                        </h1>
+                        <p class="text-slate-200 text-base lg:text-lg max-w-xl leading-relaxed font-light">
+                            Mewujudkan generasi cerdas berakhlak mulia, berprestasi, terampil, dan berwawasan global di Kabupaten Aceh Selatan.
+                        </p>
+                        <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+                            <button onclick="showSection('ppdb')" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-5 h-5"></i> Daftar PPDB Online
+                            </button>
+                            <button onclick="showSection('berita')" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl backdrop-blur-sm border border-white/20 transition">
+                                Baca Berita Terbaru
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-64 h-64 sm:w-80 sm:h-80 bg-white/10 p-6 rounded-3xl backdrop-blur-md border border-white/20 shadow-2xl flex items-center justify-center">
+                            <img id="heroLogo" src="" alt="Logo Sekolah" class="max-h-full max-w-full object-contain drop-shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Highlights -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 mb-16">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div onclick="showSection('ppdb')" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hover:shadow-2xl transition cursor-pointer group">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition">
+                            <i data-lucide="user-plus" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">PPDB Online</h3>
+                        <p class="text-xs text-slate-500 mt-1">Daftar calon siswa baru dan cek status verifikasi secara real-time.</p>
+                    </div>
+                    <div onclick="showSection('profil')" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hover:shadow-2xl transition cursor-pointer group">
+                        <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition">
+                            <i data-lucide="info" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Profil Sekolah</h3>
+                        <p class="text-xs text-slate-500 mt-1">Sambutan Kepala Sekolah, Visi-Misi, serta sejarah singkat sekolah.</p>
+                    </div>
+                    <div onclick="showSection('guru')" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hover:shadow-2xl transition cursor-pointer group">
+                        <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-xl flex items-center justify-center mb-4 group-hover:bg-sky-600 group-hover:text-white transition">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Guru & Staff</h3>
+                        <p class="text-xs text-slate-500 mt-1">Direktori lengkap tenaga pendidik profesional dan kependidikan.</p>
+                    </div>
+                    <div onclick="showSection('tautan')" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hover:shadow-2xl transition cursor-pointer group">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-600 group-hover:text-white transition">
+                            <i data-lucide="external-link" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Tautan Aplikasi Lain</h3>
+                        <p class="text-xs text-slate-500 mt-1">Akses cepat ke Dapodik, Rapor, dan layanan eksternal pendidikan.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest News Section on Beranda -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+                <!-- PPDB Banner & Quick Action on Beranda -->
+                <div class="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 text-white p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+                    <div class="space-y-4 max-w-xl">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-bold uppercase tracking-wider inline-block">
+                            📢 Penerimaan Peserta Didik Baru (PPDB) 2026/2027
+                        </span>
+                        <h2 class="text-3xl font-extrabold tracking-tight">Pendaftaran Siswa Baru SMPN 4 Meukek Resmi Dibuka</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Bergabunglah bersama kami untuk mendapatkan pendidikan unggul berkarakter. Daftar secara online mandiri atau pantau status kelulusan berkas Anda langsung di portal ini.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+                        <button onclick="showSection('ppdb')" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                            <i data-lucide="user-plus" class="w-5 h-5"></i> Buka Portal PPDB
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-brand-700 font-bold text-xs uppercase tracking-wider">Informasi Terkini</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Berita & Kegiatan Terbaru</h2>
+                    </div>
+                    <button onclick="showSection('berita')" class="text-brand-700 font-semibold text-xs hover:underline flex items-center gap-1">Lihat Semua Berita <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+                <div id="homeNewsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: PROFIL -->
+        <section id="sec-profil" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center max-w-2xl mx-auto">
+                    <span class="text-brand-700 font-bold text-xs uppercase tracking-wider">Tentang Kami</span>
+                    <h1 class="text-3xl font-extrabold text-slate-900 mt-1">Profil Sekolah SMPN 4 Meukek</h1>
+                    <p class="text-slate-600 text-sm mt-2">Mengenal lebih dekat sejarah, visi misi, serta pimpinan sekolah.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="lg:col-span-4 flex justify-center">
+                        <img id="profilHeadmasterPhoto" src="" alt="Kepala Sekolah" class="w-64 h-64 object-cover rounded-3xl shadow-md border-4 border-slate-100">
+                    </div>
+                    <div class="lg:col-span-8 space-y-4">
+                        <span class="px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold">Sambutan Kepala Sekolah</span>
+                        <h2 id="profilHeadmasterName" class="text-2xl font-bold text-slate-900"></h2>
+                        <p id="profilWelcomeSpeech" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                </div>
+
+                <!-- Modern Visi & Misi Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-emerald-900 to-slate-900 text-white p-8 rounded-3xl shadow-xl space-y-4 relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl"></div>
+                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center border border-emerald-400/30"><i data-lucide="target" class="w-6 h-6"></i></div>
+                        <h3 class="text-2xl font-extrabold">Visi Utama Sekolah</h3>
+                        <p id="profilVision" class="text-emerald-100 text-sm leading-relaxed font-light"></p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+                        <div class="w-12 h-12 bg-brand-50 text-brand-700 rounded-2xl flex items-center justify-center font-bold text-lg"><i data-lucide="compass" class="w-6 h-6"></i></div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Misi & Tujuan Sekolah</h3>
+                        <p id="profilMission" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line font-light"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: PPDB ONLINE -->
+        <section id="sec-ppdb" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-8 rounded-3xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider">Penerimaan Siswa Baru</span>
+                        <h1 class="text-3xl font-extrabold mt-2">Portal PPDB Online SMPN 4 Meukek</h1>
+                        <p class="text-emerald-100 text-sm mt-1 max-w-xl">Daftarkan putra-putri Anda secara mandiri secara online dan periksa status seleksi pendaftaran dengan mudah.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/20 text-center shrink-0">
+                        <span class="block text-xs text-emerald-200">Tahun Ajaran</span>
+                        <span class="block text-xl font-black text-white">2026/2027</span>
+                        <span class="inline-block mt-2 px-3 py-0.5 bg-emerald-400 text-slate-900 rounded font-bold text-xs">STATUS: DIBUKA</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Form Pendaftaran -->
+                    <div class="lg:col-span-7 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                            <i data-lucide="user-plus" class="w-5 h-5 text-emerald-600"></i> Formulir Pendaftaran Siswa Baru
+                        </h3>
+                        <form onsubmit="handlePpdbSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">NISN (Nomor Induk Siswa Nasional)</label>
+                                    <input type="text" id="ppdbNisn" required placeholder="10 digit NISN" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Siswa</label>
+                                    <input type="text" id="ppdbName" required placeholder="Sesuai ijazah SD" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Asal Sekolah (SD/MI)</label>
+                                    <input type="text" id="ppdbOriginSchool" required placeholder="Contoh: SDN 1 Meukek" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+                                    <select id="ppdbGender" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                        <option value="L">Laki-Laki</option>
+                                        <option value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Orang Tua / Wali</label>
+                                    <input type="text" id="ppdbParentName" required placeholder="Nama Ayah/Ibu" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">No. WhatsApp / HP</label>
+                                    <input type="tel" id="ppdbPhone" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Unggah Pas Foto / Berkas (File / URL)</label>
+                                <div class="space-y-2">
+                                    <input type="file" accept="image/*" onchange="handleFileUpload(event, 'ppdbPhotoUrl', 'ppdbPreview')" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 cursor-pointer">
+                                    <input type="url" id="ppdbPhotoUrl" placeholder="Atau tautan URL foto" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600">
+                                </div>
+                                <div class="mt-2 flex items-center gap-2">
+                                    <span class="text-xs text-slate-400">Pratinjau:</span>
+                                    <img id="ppdbPreview" src="https://placehold.co/100x100/e2e8f0/64748b?text=Foto" class="h-10 w-10 object-cover rounded border">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow transition flex items-center justify-center gap-2">
+                                <i data-lucide="check-circle" class="w-5 h-5"></i> Kirim Pendaftaran PPDB
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Cek Status & Persyaratan -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+                            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i data-lucide="search" class="w-5 h-5 text-brand-600"></i> Cek Status Pendaftaran
+                            </h3>
+                            <p class="text-xs text-slate-500">Masukkan NISN calon siswa untuk memantau status verifikasi kelulusan berkas.</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="checkNisnInput" placeholder="Masukkan 10 digit NISN..." class="flex-grow px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                                <button onclick="checkPpdbStatus()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-lg shadow">Cek</button>
+                            </div>
+                            <div id="ppdbStatusResult" class="hidden p-4 rounded-xl border text-sm font-medium"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-3">
+                            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <i data-lucide="info" class="w-4 h-4 text-amber-500"></i> Syarat Pendaftaran PPDB
+                            </h4>
+                            <div id="publicPpdbRequirements" class="text-xs text-slate-600 space-y-2 whitespace-pre-line">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: GURU & STAFF -->
+        <section id="sec-guru" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900">Direktori Guru & Tenaga Kependidikan</h1>
+                        <p class="text-slate-600 mt-1">Daftar pendidik profesional yang membimbing siswa-siswi SMPN 4 Meukek.</p>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="teacherSearchInput" oninput="renderPublicTeachers()" placeholder="Cari nama guru atau mapel..." class="w-full sm:w-64 pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+                    </div>
+                </div>
+                <div id="publicTeacherGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: DATA SISWA -->
+        <section id="sec-siswa" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900">Direktori Data Siswa Aktif</h1>
+                        <p class="text-slate-600 mt-1">Transparansi data peserta didik terdaftar per tingkat kelas.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterStudentClass('All')" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg text-xs font-semibold">Semua Kelas</button>
+                        <button onclick="filterStudentClass('Kelas 7')" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">Kelas 7</button>
+                        <button onclick="filterStudentClass('Kelas 8')" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">Kelas 8</button>
+                        <button onclick="filterStudentClass('Kelas 9')" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">Kelas 9</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Siswa</th>
+                                <th class="p-4">NISN</th>
+                                <th class="p-4">Kelas</th>
+                                <th class="p-4">Gender</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="publicStudentTableBody">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: E-LIBRARY -->
+        <section id="sec-perpustakaan" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-5">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900">Perpustakaan Digital (E-Library)</h1>
+                        <p class="text-slate-600 mt-1">Unduh modul, buku teks kurikulum, dan bahan ajar digital siswa.</p>
+                    </div>
+                </div>
+                <div id="publicLibraryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: BERITA & GALERI -->
+        <section id="sec-berita" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="border-b border-slate-200 pb-5">
+                    <h1 class="text-3xl font-bold text-slate-900">Berita, Artikel & Galeri Video</h1>
+                    <p class="text-slate-600 mt-1">Informasi dokumentasi kegiatan resmi sekolah terbaru.</p>
+                </div>
+                <div id="publicNewsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: STATISTIK -->
+        <section id="sec-statistik" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                <div class="border-b border-slate-200 pb-5">
+                    <h1 class="text-3xl font-bold text-slate-900">Statistik & Indikator Mutu Sekolah</h1>
+                    <p class="text-slate-600 mt-1">Data kuantitatif perkembangan dan pencapaian SMPN 4 Meukek.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex items-center gap-4">
+                        <div class="w-14 h-14 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center font-bold text-xl"><i data-lucide="users" class="w-7 h-7"></i></div>
+                        <div>
+                            <span id="statTotalStudents" class="text-2xl font-black text-slate-900">0</span>
+                            <span class="block text-xs text-slate-500 font-medium">Total Siswa Aktif</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex items-center gap-4">
+                        <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center font-bold text-xl"><i data-lucide="graduation-cap" class="w-7 h-7"></i></div>
+                        <div>
+                            <span id="statTotalTeachers" class="text-2xl font-black text-slate-900">0</span>
+                            <span class="block text-xs text-slate-500 font-medium">Total Guru & Staff</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex items-center gap-4">
+                        <div class="w-14 h-14 bg-sky-100 text-sky-700 rounded-2xl flex items-center justify-center font-bold text-xl"><i data-lucide="book-open" class="w-7 h-7"></i></div>
+                        <div>
+                            <span class="text-2xl font-black text-slate-900">3 Tingkat</span>
+                            <span class="block text-xs text-slate-500 font-medium">Kelas (7, 8, 9)</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex items-center gap-4">
+                        <div class="w-14 h-14 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center font-bold text-xl"><i data-lucide="award" class="w-7 h-7"></i></div>
+                        <div>
+                            <span class="text-2xl font-black text-slate-900">100%</span>
+                            <span class="block text-xs text-slate-500 font-medium">Akreditasi / Mutu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TAUTAN APLIKASI LAIN -->
+        <section id="sec-tautan" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                <div class="border-b border-slate-200 pb-5">
+                    <h1 class="text-3xl font-bold text-slate-900">Tautan Aplikasi & Media Sosial Resmi</h1>
+                    <p class="text-slate-600 mt-1">Akses cepat menuju platform pendataan pendidikan dan saluran media sosial resmi sekolah.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2"><i data-lucide="globe" class="w-5 h-5 text-brand-600"></i> Saluran Media Sosial Resmi</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <a id="socialTiktokLink" href="#" target="_blank" class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-3xl shadow-md hover:scale-[1.02] transition flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-pink-400"><i data-lucide="video" class="w-6 h-6"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm">TikTok Resmi</h4>
+                                <span class="text-xs text-slate-400">@smpn4meukek</span>
+                            </div>
+                        </a>
+                        <a id="socialYoutubeLink" href="#" target="_blank" class="bg-gradient-to-br from-red-900 to-slate-900 text-white p-6 rounded-3xl shadow-md hover:scale-[1.02] transition flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-red-400"><i data-lucide="tv" class="w-6 h-6"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm">YouTube Channel</h4>
+                                <span class="text-xs text-slate-400">SMPN 4 Meukek Official</span>
+                            </div>
+                        </a>
+                        <a id="socialIgLink" href="#" target="_blank" class="bg-gradient-to-br from-purple-900 via-pink-900 to-slate-900 text-white p-6 rounded-3xl shadow-md hover:scale-[1.02] transition flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-purple-300"><i data-lucide="camera" class="w-6 h-6"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm">Instagram Sekolah</h4>
+                                <span class="text-xs text-slate-400">@smpn4meukek</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2"><i data-lucide="external-link" class="w-5 h-5 text-brand-600"></i> Tautan Layanan Eksternal Pendidikan</h3>
+                    <div id="publicLinksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: KONTAK -->
+        <section id="sec-kontak" class="public-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="border-b border-slate-200 pb-5">
+                    <h1 class="text-3xl font-bold text-slate-900">Hubungi Kami</h1>
+                    <p class="text-slate-600 mt-1">Layanan informasi resmi dan alamat lokasi SMPN 4 Meukek.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
+                        <h3 class="text-xl font-bold text-slate-900">Informasi Kontak Sekolah</h3>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-brand-600 shrink-0 mt-0.5"></i><span id="contactAddress"></span></div>
+                            <div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-brand-600 shrink-0"></i><span id="contactEmail"></span></div>
+                            <div class="flex items-center gap-3"><i data-lucide="phone" class="w-5 h-5 text-brand-600 shrink-0"></i><span id="contactPhone"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+                        <h3 class="text-xl font-bold text-slate-900">Kirim Pesan / Aspirasi</h3>
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <input type="text" required placeholder="Nama Anda..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                            <input type="email" required placeholder="Email Anda..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600">
+                            <textarea required rows="4" placeholder="Tuliskan pesan atau pertanyaan..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-600"></textarea>
+                            <button type="submit" class="w-full py-3 bg-brand-600 text-white font-bold rounded-lg shadow">Kirim Pesan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- NEWS DETAIL MODAL -->
+    <div id="newsDetailModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6">
+            <div class="flex justify-between items-start">
+                <span id="modalNewsCategory" class="px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold"></span>
+                <button onclick="closeNewsModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <h2 id="modalNewsTitle" class="text-2xl font-extrabold text-slate-900"></h2>
+            <div class="flex items-center gap-4 text-xs text-slate-500 border-b border-slate-100 pb-3">
+                <span id="modalNewsDate"></span> • <span id="modalNewsAuthor"></span>
+            </div>
+            <img id="modalNewsImage" src="" class="w-full h-72 object-cover rounded-2xl shadow-inner">
+            <div id="modalNewsVideoContainer" class="hidden aspect-video w-full rounded-2xl overflow-hidden shadow">
+                <iframe id="modalNewsVideoIframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <p id="modalNewsContent" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD CONTAINER -->
+    <div id="adminDashboard" class="hidden min-h-screen bg-slate-100 flex flex-col md:flex-row">
+        <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between">
+            <div>
+                <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+                    <img id="adminSideLogo" src="" class="h-9 w-9 object-contain rounded-full bg-white p-0.5">
+                    <div>
+                        <span class="block font-extrabold text-sm text-white">PANEL ADMIN</span>
+                        <span class="block text-xs text-slate-400">SMPN 4 Meukek</span>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-1">
+                    <button onclick="switchAdminTab('ppdb')" id="btnTabPpdb" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i> Verifikasi PPDB
+                    </button>
+                    <button onclick="switchAdminTab('berita')" id="btnTabBerita" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="newspaper" class="w-4 h-4"></i> Kelola Berita
+                    </button>
+                    <button onclick="switchAdminTab('guru')" id="btnTabGuru" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i> Kelola Guru
+                    </button>
+                    <button onclick="switchAdminTab('siswa')" id="btnTabSiswa" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="users" class="w-4 h-4"></i> Kelola Siswa
+                    </button>
+                    <button onclick="switchAdminTab('library')" id="btnTabLibrary" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> E-Library (Buku)
+                    </button>
+                    <button onclick="switchAdminTab('tautan')" id="btnTabTautan" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Tautan & Sosmed
+                    </button>
+                    <button onclick="switchAdminTab('profil')" id="btnTabProfil" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="landmark" class="w-4 h-4"></i> Pengaturan Sekolah
+                    </button>
+                    <button onclick="switchAdminTab('akun')" id="btnTabAkun" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i> Pengaturan Akun Admin
+                    </button>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-xl text-sm font-semibold transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Admin
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-grow p-6 md:p-10 overflow-y-auto">
+            <!-- TAB ADMIN: PPDB -->
+            <div id="adminTabPpdb" class="admin-tab space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Kelola & Verifikasi PPDB Online</h2>
+                        <p class="text-slate-600 text-sm">Tambah pendaftar, edit data, verifikasi kelulusan, hapus, atau atur persyaratan.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openPpdbModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg shadow flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Pendaftar
+                        </button>
+                        <button onclick="exportPpdbCSV()" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-lg shadow flex items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Ekspor CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Siswa / NISN</th>
+                                <th class="p-4">Asal Sekolah</th>
+                                <th class="p-4">Orang Tua / Kontak</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPpdbTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: BERITA -->
+            <div id="adminTabBerita" class="admin-tab hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Kelola Berita & Galeri</h2>
+                        <p class="text-slate-600 text-sm">Tambah artikel baru beserta upload foto dan video YouTube.</p>
+                    </div>
+                    <button onclick="openNewsModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl shadow flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Tambah Berita
+                    </button>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Judul Artikel</th>
+                                <th class="p-4">Kategori</th>
+                                <th class="p-4">Tanggal</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminNewsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: GURU -->
+            <div id="adminTabGuru" class="admin-tab hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Kelola Guru & Staff</h2>
+                        <p class="text-slate-600 text-sm">Tambah, edit, dan hapus data tenaga pendidik.</p>
+                    </div>
+                    <button onclick="openTeacherModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl shadow flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Tambah Guru
+                    </button>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Nama & Gelar</th>
+                                <th class="p-4">NIP</th>
+                                <th class="p-4">Mata Pelajaran</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTeacherTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: SISWA -->
+            <div id="adminTabSiswa" class="admin-tab hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Kelola Data Siswa</h2>
+                        <p class="text-slate-600 text-sm">Tambah, edit, dan hapus data siswa per kelas.</p>
+                    </div>
+                    <button onclick="openStudentModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl shadow flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Tambah Siswa
+                    </button>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Nama Siswa</th>
+                                <th class="p-4">NISN</th>
+                                <th class="p-4">Kelas</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminStudentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: E-LIBRARY -->
+            <div id="adminTabLibrary" class="admin-tab hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Kelola E-Library</h2>
+                        <p class="text-slate-600 text-sm">Tambah dan kelola koleksi buku digital siswa.</p>
+                    </div>
+                    <button onclick="openLibraryModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl shadow flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Tambah Buku
+                    </button>
+                </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">Judul Buku</th>
+                                <th class="p-4">Kategori</th>
+                                <th class="p-4">Penulis</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminLibraryTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: TAUTAN -->
+            <div id="adminTabTautan" class="admin-tab hidden space-y-8">
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900">Pengaturan Tautan Media Sosial & Eksternal</h2>
+                    <p class="text-slate-600 text-sm">Kelola tautan akun resmi TikTok, YouTube, Instagram serta link layanan pendidikan.</p>
+                </div>
+                
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6 max-w-2xl">
+                    <h3 class="font-bold text-slate-900 text-base">URL Akun Media Sosial Resmi</h3>
+                    <form onsubmit="handleSaveSocialLinks(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Link URL TikTok Resmi</label>
+                            <input type="url" id="socialTiktokInput" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Link URL YouTube Channel</label>
+                            <input type="url" id="socialYoutubeInput" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Link URL Instagram Sekolah</label>
+                            <input type="url" id="socialIgInput" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow">Simpan Link Media Sosial</button>
+                    </form>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 text-base">Daftar Tautan Eksternal Lainnya</h3>
+                        <button onclick="openLinkModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-xl shadow flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Tautan
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4">Judul Layanan</th>
+                                    <th class="p-4">URL Tautan</th>
+                                    <th class="p-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminLinkTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: PENGATURAN PROFIL SEKOLAH -->
+            <div id="adminTabProfil" class="admin-tab hidden space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900">Pengaturan Profil & Identitas Sekolah</h2>
+                    <p class="text-slate-600 text-sm">Kelola nama sekolah, NPSN, logo, kontak, sambutan kepala sekolah, sejarah, visi-misi, dan persyaratan PPDB secara lengkap.</p>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
+                    <form onsubmit="handleSaveProfile(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Sekolah</label>
+                                <input type="text" id="setSchoolName" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">NPSN</label>
+                                <input type="text" id="setNpsn" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telepon / Kontak</label>
+                                <input type="text" id="setPhone" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Email Resmi Sekolah</label>
+                                <input type="email" id="setSchoolEmail" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap Sekolah</label>
+                                <input type="text" id="setAddress" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Logo Sekolah (File / URL)</label>
+                                <input type="file" accept="image/*" onchange="handleFileUpload(event, 'setLogoUrl', 'setLogoPreview')" class="w-full text-xs text-slate-500 mb-1">
+                                <input type="url" id="setLogoUrl" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                                <img id="setLogoPreview" src="" class="h-12 w-12 object-contain mt-2 border rounded">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Foto Kepala Sekolah (File / URL)</label>
+                                <input type="file" accept="image/*" onchange="handleFileUpload(event, 'setHeadPhoto', 'setHeadPhotoPrev')" class="w-full text-xs text-slate-500 mb-1">
+                                <input type="url" id="setHeadPhoto" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                                <img id="setHeadPhotoPrev" src="" class="h-12 w-12 object-cover mt-2 border rounded-full">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Kepala Sekolah & Gelar</label>
+                                <input type="text" id="setHeadmasterName" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sambutan Kepala Sekolah</label>
+                            <textarea id="setWelcomeSpeech" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Visi Sekolah</label>
+                                <textarea id="setVision" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Misi Sekolah</label>
+                                <textarea id="setMission" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Sejarah Singkat Sekolah</label>
+                            <textarea id="setHistory" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Persyaratan Pendaftaran PPDB Online</label>
+                            <textarea id="setPpdbReq" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm shadow">Simpan Pengaturan Profil Sekolah</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB ADMIN: PENGATURAN AKUN ADMIN -->
+            <div id="adminTabAkun" class="admin-tab hidden space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900">Pengaturan Akun & Keamanan Admin</h2>
+                    <p class="text-slate-600 text-sm">Perbarui kredensial login, email pemulihan, dan atur visibilitas tombol login admin publik.</p>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6 max-w-xl">
+                    <form onsubmit="handleSaveAccount(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Pemulihan (Terhubung Lupa Password)</label>
+                            <input type="email" id="setAdminEmail" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Username Admin Baru</label>
+                            <input type="text" id="setAdminUser" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Password Admin Baru (Biarkan kosong jika tidak diubah)</label>
+                            <input type="password" id="setAdminPass" placeholder="••••••••" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div class="pt-2 border-t border-slate-100">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="setAdminShowLogin" class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-900">Tampilkan Tombol "Login Admin" di Beranda Publik</span>
+                                    <span class="block text-[11px] text-slate-500">Jika dimatikan (unchecked), tombol masuk admin di beranda akan disembunyikan untuk publik.</span>
+                                </div>
+                            </label>
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm shadow">Simpan Kredensial & Pengaturan Akun</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL FORM: PPDB ADMIN -->
+    <div id="ppdbModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 id="ppdbModalTitle" class="font-bold text-lg text-slate-900">Tambah Pendaftar PPDB</h3>
+            <form onsubmit="handleSavePpdbAdmin(event)" class="space-y-4">
+                <input type="hidden" id="ppdbFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">NISN</label>
+                    <input type="text" id="ppdbFormNisn" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Siswa</label>
+                    <input type="text" id="ppdbFormName" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Asal Sekolah</label>
+                    <input type="text" id="ppdbFormOrigin" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Gender</label>
+                        <select id="ppdbFormGender" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="L">Laki-Laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Status</label>
+                        <select id="ppdbFormStatus" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="Verifikasi Pending">Verifikasi Pending</option>
+                            <option value="Diterima">Diterima</option>
+                            <option value="Ditolak">Ditolak</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Orang Tua</label>
+                    <input type="text" id="ppdbFormParent" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">No HP / WhatsApp</label>
+                    <input type="tel" id="ppdbFormPhone" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closePpdbModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: BERITA -->
+    <div id="newsModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <h3 id="newsModalTitle" class="font-bold text-lg text-slate-900">Tambah Berita</h3>
+            <form onsubmit="handleSaveNews(event)" class="space-y-4">
+                <input type="hidden" id="newsFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Artikel</label>
+                    <input type="text" id="newsFormTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
+                        <select id="newsFormCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="Pengumuman">Pengumuman</option>
+                            <option value="Kegiatan">Kegiatan</option>
+                            <option value="Prestasi">Prestasi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Penulis</label>
+                        <input type="text" id="newsFormAuthor" value="Admin" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Foto Berita (File / URL)</label>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(event, 'newsFormImage', 'newsFormImgPrev')" class="w-full text-xs text-slate-500 mb-1">
+                    <input type="url" id="newsFormImage" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                    <img id="newsFormImgPrev" src="" class="h-16 w-24 object-cover mt-2 rounded border">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Embed URL Video YouTube (Opsional)</label>
+                    <input type="url" id="newsFormVideo" placeholder="https://www.youtube.com/embed/..." class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Isi Berita</label>
+                    <textarea id="newsFormContent" required rows="5" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeNewsModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan Berita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: GURU -->
+    <div id="teacherModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 id="teacherModalTitle" class="font-bold text-lg text-slate-900">Tambah Guru</h3>
+            <form onsubmit="handleSaveTeacher(event)" class="space-y-4">
+                <input type="hidden" id="teacherFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama & Gelar</label>
+                    <input type="text" id="teacherFormName" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">NIP</label>
+                    <input type="text" id="teacherFormNip" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Mata Pelajaran / Tugas</label>
+                    <input type="text" id="teacherFormSubject" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Foto Guru (File / URL)</label>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(event, 'teacherFormPhoto', 'teacherImgPrev')" class="w-full text-xs text-slate-500 mb-1">
+                    <input type="url" id="teacherFormPhoto" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                    <img id="teacherImgPrev" src="" class="h-16 w-16 object-cover mt-2 rounded-full border">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeTeacherModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: SISWA -->
+    <div id="studentModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 id="studentModalTitle" class="font-bold text-lg text-slate-900">Tambah Siswa</h3>
+            <form onsubmit="handleSaveStudent(event)" class="space-y-4">
+                <input type="hidden" id="studentFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="studentFormName" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">NISN</label>
+                    <input type="text" id="studentFormNisn" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kelas</label>
+                    <select id="studentFormClass" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                        <option value="Kelas 7">Kelas 7</option>
+                        <option value="Kelas 8">Kelas 8</option>
+                        <option value="Kelas 9">Kelas 9</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Foto Siswa (File / URL)</label>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(event, 'studentFormPhoto', 'studentImgPrev')" class="w-full text-xs text-slate-500 mb-1">
+                    <input type="url" id="studentFormPhoto" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                    <img id="studentImgPrev" src="" class="h-16 w-16 object-cover mt-2 rounded-full border">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeStudentModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: LIBRARY -->
+    <div id="libraryModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 id="libraryModalTitle" class="font-bold text-lg text-slate-900">Tambah Buku E-Library</h3>
+            <form onsubmit="handleSaveLibrary(event)" class="space-y-4">
+                <input type="hidden" id="libraryFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Buku</label>
+                    <input type="text" id="libraryFormTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori / Kelas</label>
+                    <select id="libraryFormCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                        <option value="Kelas 7">Kelas 7</option>
+                        <option value="Kelas 8">Kelas 8</option>
+                        <option value="Kelas 9">Kelas 9</option>
+                        <option value="Umum">Umum</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Penulis / Pengarang</label>
+                    <input type="text" id="libraryFormAuthor" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Cover Buku (File / URL)</label>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(event, 'libraryFormCover', 'libImgPrev')" class="w-full text-xs text-slate-500 mb-1">
+                    <input type="url" id="libraryFormCover" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                    <img id="libImgPrev" src="" class="h-16 w-12 object-cover mt-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Link Download Dokumen PDF</label>
+                    <input type="url" id="libraryFormFileUrl" required value="#" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeLibraryModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan Buku</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: LINK EKSTERNAL -->
+    <div id="linkModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 id="linkModalTitle" class="font-bold text-lg text-slate-900">Tambah Tautan Aplikasi</h3>
+            <form onsubmit="handleSaveLink(event)" class="space-y-4">
+                <input type="hidden" id="linkFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Layanan / Aplikasi</label>
+                    <input type="text" id="linkFormTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL Tautan Eksternal</label>
+                    <input type="url" id="linkFormUrl" required placeholder="https://..." class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeLinkModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white font-semibold text-sm rounded-lg shadow">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CORE LOGIC & CONTROLLER SCRIPT -->
+    <script>
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const box = document.getElementById('toastBox');
+            const message = document.getElementById('toastMessage');
+            const icon = document.getElementById('toastIcon');
+
+            message.innerText = msg;
+            if (isError) {
+                box.className = "bg-red-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-red-500";
+                icon.setAttribute('data-lucide', 'alert-circle');
+            } else {
+                box.className = "bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700";
+                icon.setAttribute('data-lucide', 'check-circle');
+            }
+            if(window.lucide) lucide.createIcons();
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.public-section').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById('sec-' + sectionId);
+            if(target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        function openForgotPasswordModal() { 
+            closeLoginModal();
+            document.getElementById('forgotPasswordModal').classList.remove('hidden'); 
+        }
+        function closeForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.add('hidden'); }
+
+        let deleteCallback = null;
+        function openDeleteModal(callback) {
+            deleteCallback = callback;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+        function closeDeleteModal() {
+            deleteCallback = null;
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+            if(deleteCallback) deleteCallback();
+            closeDeleteModal();
+        };
+
+        function handleFileUpload(event, targetUrlInputId, previewImgId) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                document.getElementById(targetUrlInputId).value = base64;
+                const prev = document.getElementById(previewImgId);
+                if(prev) prev.src = base64;
+                showToast('Berkas berhasil dipilih & dimuat!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // RENDER PUBLIC CONTENT
+        function renderAllPublicContent() {
+            document.getElementById('navSchoolName').innerText = profileData.schoolName;
+            document.getElementById('navLogoImg').src = profileData.logoUrl;
+            document.getElementById('heroLogo').src = profileData.logoUrl;
+            document.getElementById('adminSideLogo').src = profileData.logoUrl;
+            document.getElementById('heroTitle').innerText = 'Selamat Datang di Portal ' + profileData.schoolName;
+            document.getElementById('profilHeadmasterPhoto').src = profileData.headmasterPhoto;
+            document.getElementById('profilHeadmasterName').innerText = profileData.headmasterName;
+            document.getElementById('profilWelcomeSpeech').innerText = profileData.welcomeSpeech;
+            document.getElementById('profilVision').innerText = profileData.vision;
+            document.getElementById('profilMission').innerText = profileData.mission;
+
+            document.getElementById('publicPpdbRequirements').innerText = profileData.ppdbRequirements || 'Persyaratan belum diatur oleh admin.';
+
+            document.getElementById('contactAddress').innerText = profileData.address;
+            document.getElementById('contactEmail').innerText = profileData.email;
+            document.getElementById('contactPhone').innerText = profileData.phone;
+
+            document.getElementById('statTotalStudents').innerText = appStudents.length;
+            document.getElementById('statTotalTeachers').innerText = appTeachers.length;
+
+            // Social links
+            const sTiktok = document.getElementById('socialTiktokLink');
+            const sYoutube = document.getElementById('socialYoutubeLink');
+            const sIg = document.getElementById('socialIgLink');
+            if(sTiktok) sTiktok.href = socialLinks.tiktok;
+            if(sYoutube) sYoutube.href = socialLinks.youtube;
+            if(sIg) sIg.href = socialLinks.instagram;
+
+            renderHomeNews();
+            renderPublicTeachers();
+            renderPublicStudents('All');
+            renderPublicLibrary();
+            renderPublicNews();
+            renderPublicLinks();
+        }
+
+        function renderHomeNews() {
+            const grid = document.getElementById('homeNewsGrid');
+            if(!grid) return;
+            const latest = appNews.slice(0, 3);
+            grid.innerHTML = latest.map(n => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 flex flex-col justify-between group cursor-pointer" onclick="openNewsDetail('${n.id}')">
+                    <div>
+                        <div class="relative overflow-hidden h-48">
+                            <img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 left-3 px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-full">${n.category}</span>
+                        </div>
+                        <div class="p-6 space-y-2">
+                            <span class="text-xs text-slate-400 font-medium">${n.date}</span>
+                            <h3 class="font-bold text-slate-900 text-base line-clamp-2 group-hover:text-brand-700 transition">${n.title}</h3>
+                            <p class="text-xs text-slate-600 line-clamp-2">${n.content}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <span class="text-brand-700 font-semibold text-xs flex items-center gap-1">Baca Selengkapnya <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></span>
+                    </div>
+                </div>
+            `).join('');
+            if(window.lucide) lucide.createIcons();
+        }
+
+        function renderPublicTeachers() {
+            const grid = document.getElementById('publicTeacherGrid');
+            if(!grid) return;
+            const search = (document.getElementById('teacherSearchInput')?.value || '').toLowerCase();
+            const filtered = appTeachers.filter(t => t.name.toLowerCase().includes(search) || t.subject.toLowerCase().includes(search));
+            
+            grid.innerHTML = filtered.map(t => `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 text-center space-y-3">
+                    <img src="${t.photo}" class="w-24 h-24 object-cover rounded-full mx-auto border-4 border-slate-50 shadow">
+                    <h3 class="font-bold text-slate-900 text-sm">${t.name}</h3>
+                    <p class="text-xs font-semibold text-brand-700">${t.subject}</p>
+                    <span class="inline-block text-[11px] text-slate-400 font-mono">NIP: ${t.nip}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterStudentClass(cls) {
+            renderPublicStudents(cls);
+        }
+
+        function renderPublicStudents(cls) {
+            const tbody = document.getElementById('publicStudentTableBody');
+            if(!tbody) return;
+            const filtered = cls === 'All' ? appStudents : appStudents.filter(s => s.studentClass === cls);
+            
+            tbody.innerHTML = filtered.map(s => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${s.photo}" class="w-9 h-9 rounded-full object-cover border">
+                        <span class="font-semibold text-slate-900 text-xs">${s.name}</span>
+                    </td>
+                    <td class="p-4 text-xs font-mono text-slate-600">${s.nisn}</td>
+                    <td class="p-4 text-xs font-semibold text-brand-700">${s.studentClass}</td>
+                    <td class="p-4 text-xs">${s.gender}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold">${s.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPublicLibrary() {
+            const grid = document.getElementById('publicLibraryGrid');
+            if(!grid) return;
+            grid.innerHTML = appLibrary.map(b => `
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+                    <div>
+                        <img src="${b.cover}" class="w-full h-44 object-cover rounded-2xl shadow-inner mb-3">
+                        <span class="px-2 py-0.5 bg-brand-50 text-brand-700 rounded text-[10px] font-bold">${b.category}</span>
+                        <h4 class="font-bold text-slate-900 text-xs mt-1 line-clamp-2">${b.title}</h4>
+                        <p class="text-[11px] text-slate-500 mt-1">Penulis: ${b.author}</p>
+                    </div>
+                    <a href="${b.fileUrl}" onclick="showToast('Mengunduh dokumen buku...')" target="_blank" class="w-full py-2 bg-brand-600 text-white font-semibold text-[11px] rounded-xl text-center flex items-center justify-center gap-1">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Buku
+                    </a>
+                </div>
+            `).join('');
+            if(window.lucide) lucide.createIcons();
+        }
+
+        function renderPublicNews() {
+            const grid = document.getElementById('publicNewsGrid');
+            if(!grid) return;
+            grid.innerHTML = appNews.map(n => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 flex flex-col justify-between cursor-pointer group" onclick="openNewsDetail('${n.id}')">
+                    <div>
+                        <div class="relative overflow-hidden h-52">
+                            <img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 left-3 px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-full">${n.category}</span>
+                            ${n.videoUrl ? '<span class="absolute bottom-3 right-3 px-2 py-1 bg-slate-900/80 text-white text-[10px] rounded-lg font-bold flex items-center gap-1"><i data-lucide="video" class="w-3 h-3"></i> Video</span>' : ''}
+                        </div>
+                        <div class="p-6 space-y-2">
+                            <span class="text-xs text-slate-400">${n.date}</span>
+                            <h3 class="font-bold text-slate-900 text-base line-clamp-2 group-hover:text-brand-700 transition">${n.title}</h3>
+                            <p class="text-xs text-slate-600 line-clamp-3">${n.content}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <span class="text-brand-700 font-semibold text-xs flex items-center gap-1">Baca Selengkapnya <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></span>
+                    </div>
+                </div>
+            `).join('');
+            if(window.lucide) lucide.createIcons();
+        }
+
+        function renderPublicLinks() {
+            const grid = document.getElementById('publicLinksGrid');
+            if(!grid) return;
+            grid.innerHTML = appLinks.map(l => `
+                <a href="${l.url}" target="_blank" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg transition flex items-center gap-4 group">
+                    <div class="w-12 h-12 bg-brand-50 text-brand-700 rounded-2xl flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition shrink-0">
+                        <i data-lucide="external-link" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm group-hover:text-brand-700 transition">${l.title}</h4>
+                        <span class="text-xs text-slate-400">Akses Layanan Eksternal</span>
+                    </div>
+                </a>
+            `).join('');
+            if(window.lucide) lucide.createIcons();
+        }
+
+        function openNewsDetail(id) {
+            const n = appNews.find(item => item.id === id);
+            if(!n) return;
+            document.getElementById('modalNewsCategory').innerText = n.category;
+            document.getElementById('modalNewsTitle').innerText = n.title;
+            document.getElementById('modalNewsDate').innerText = n.date;
+            document.getElementById('modalNewsAuthor').innerText = 'Oleh: ' + n.author;
+            document.getElementById('modalNewsImage').src = n.image;
+            document.getElementById('modalNewsContent').innerText = n.content;
+
+            const vCont = document.getElementById('modalNewsVideoContainer');
+            const vIf = document.getElementById('modalNewsVideoIframe');
+            if(n.videoUrl) {
+                vCont.classList.remove('hidden');
+                vIf.src = n.videoUrl;
+            } else {
+                vCont.classList.add('hidden');
+                vIf.src = '';
+            }
+
+            document.getElementById('newsDetailModal').classList.remove('hidden');
+        }
+        function closeNewsModal() { document.getElementById('newsDetailModal').classList.add('hidden'); }
+
+        // PPDB PUBLIC SUBMIT & CHECK
+        function handlePpdbSubmit(e) {
+            e.preventDefault();
+            const nisn = document.getElementById('ppdbNisn').value.trim();
+            const name = document.getElementById('ppdbName').value.trim();
+            const originSchool = document.getElementById('ppdbOriginSchool').value.trim();
+            const gender = document.getElementById('ppdbGender').value;
+            const parentName = document.getElementById('ppdbParentName').value.trim();
+            const phone = document.getElementById('ppdbPhone').value.trim();
+            const photo = document.getElementById('ppdbPhotoUrl').value || 'https://placehold.co/100x100/15803d/ffffff?text=Foto';
+
+            if(appPpdb.some(p => p.nisn === nisn)) {
+                return showToast('NISN ini sudah terdaftar sebelumnya!', true);
+            }
+
+            appPpdb.unshift({
+                id: 'ppdb-' + Date.now(),
+                nisn, name, originSchool, gender, parentName, phone, photo,
+                status: 'Verifikasi Pending'
+            });
+            localStorage.setItem(KEYS.PPDB, JSON.stringify(appPpdb));
+            showToast('Pendaftaran PPDB berhasil dikirim! Simpan NISN Anda untuk pengecekan status.');
+            e.target.reset();
+            document.getElementById('ppdbPreview').src = 'https://placehold.co/100x100/e2e8f0/64748b?text=Foto';
+        }
+
+        function checkPpdbStatus() {
+            const nisn = document.getElementById('checkNisnInput').value.trim();
+            const res = document.getElementById('ppdbStatusResult');
+            if(!nisn) return showToast('Masukkan NISN terlebih dahulu!', true);
+
+            const found = appPpdb.find(p => p.nisn === nisn);
+            res.classList.remove('hidden', 'bg-emerald-50', 'bg-amber-50', 'bg-red-50', 'text-emerald-800', 'text-amber-800', 'text-red-800', 'border-emerald-200', 'border-amber-200', 'border-red-200');
+
+            if(found) {
+                if(found.status === 'Diterima') {
+                    res.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                    res.innerHTML = `✅ Selamat! <strong>${found.name}</strong> dinyatakan <strong>DITERIMA</strong> di SMPN 4 Meukek.`;
+                } else if(found.status === 'Ditolak') {
+                    res.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+                    res.innerHTML = `❌ Mohon maaf, pendaftaran atas nama <strong>${found.name}</strong> belum dapat diterima.`;
+                } else {
+                    res.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                    res.innerHTML = `⏳ Pendaftaran atas nama <strong>${found.name}</strong> sedang dalam <strong>PROSES VERIFIKASI</strong>.`;
+                }
+            } else {
+                res.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+                res.innerHTML = `⚠️ Data dengan NISN <strong>${nisn}</strong> tidak ditemukan di database PPDB.`;
+            }
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showToast('Pesan aspirasi berhasil dikirim ke pihak sekolah!');
+            e.target.reset();
+        }
+
+        // ADMIN AUTH & LOGIN
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value.trim();
+            const savedAuth = JSON.parse(localStorage.getItem(KEYS.ADMIN_AUTH));
+
+            if(u === savedAuth.username && p === savedAuth.password) {
+                currentAdmin = u;
+                closeLoginModal();
+                document.getElementById('publicHeader').classList.add('hidden');
+                document.getElementById('publicContent').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                switchAdminTab('ppdb');
+                showToast('Berhasil masuk ke Dashboard Admin!');
+            } else {
+                showToast('Username atau Password admin salah!', true);
+            }
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmailInput').value.trim();
+            const savedAuth = JSON.parse(localStorage.getItem(KEYS.ADMIN_AUTH));
+            
+            if(email === savedAuth.email) {
+                closeForgotPasswordModal();
+                showToast(`Instruksi pemulihan password telah dikirim ke email: ${email}`);
+            } else {
+                showToast('Alamat email tidak cocok dengan email administrator terdaftar!', true);
+            }
+        }
+
+        function handleLogout() {
+            currentAdmin = null;
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('publicHeader').classList.remove('hidden');
+            document.getElementById('publicContent').classList.remove('hidden');
+            showToast('Berhasil keluar dari sesi admin.');
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+            document.getElementById('adminTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.remove('hidden');
+
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.className = "admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition");
+            const activeBtn = document.getElementById('btnTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            if(activeBtn) activeBtn.className = "admin-nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-brand-600 shadow";
+
+            if(tabName === 'ppdb') renderAdminPpdb();
+            if(tabName === 'berita') renderAdminNews();
+            if(tabName === 'guru') renderAdminTeachers();
+            if(tabName === 'siswa') renderAdminStudents();
+            if(tabName === 'library') renderAdminLibrary();
+            if(tabName === 'tautan') renderAdminLinks();
+            if(tabName === 'profil') loadAdminProfileForm();
+            if(tabName === 'akun') loadAdminAccountForm();
+        }
+
+        // ADMIN PPDB MANAGEMEN
+        function renderAdminPpdb() {
+            const tbody = document.getElementById('adminPpdbTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appPpdb.map(p => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${p.photo}" class="w-10 h-10 rounded-full object-cover border">
+                        <div>
+                            <span class="font-bold text-slate-900 block">${p.name}</span>
+                            <span class="text-xs font-mono text-slate-500">NISN: ${p.nisn} (${p.gender})</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-xs font-medium">${p.originSchool}</td>
+                    <td class="p-4 text-xs"><span class="font-semibold block">${p.parentName}</span><span class="text-slate-400">${p.phone}</span></td>
+                    <td class="p-4"><span class="px-2.5 py-1 ${p.status === 'Diterima' ? 'bg-emerald-100 text-emerald-800' : (p.status === 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800')} rounded-full text-[10px] font-bold">${p.status}</span></td>
+                    <td class="p-4 text-right space-x-1">
+                        <button onclick="openPpdbModal('${p.id}')" class="px-2 py-1 bg-brand-50 text-brand-700 rounded text-xs font-semibold">Edit</button>
+                        <button onclick="updatePpdbStatus('${p.id}', 'Diterima')" class="px-2 py-1 bg-emerald-600 text-white rounded text-xs font-bold">Terima</button>
+                        <button onclick="deletePpdb('${p.id}')" class="px-2 py-1 bg-red-600 text-white rounded text-xs font-bold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openPpdbModal(id = null) {
+            document.getElementById('ppdbModal').classList.remove('hidden');
+            if(id) {
+                const p = appPpdb.find(i => i.id === id);
+                document.getElementById('ppdbModalTitle').innerText = 'Edit Data Pendaftar';
+                document.getElementById('ppdbFormId').value = p.id;
+                document.getElementById('ppdbFormNisn').value = p.nisn;
+                document.getElementById('ppdbFormName').value = p.name;
+                document.getElementById('ppdbFormOrigin').value = p.originSchool;
+                document.getElementById('ppdbFormGender').value = p.gender;
+                document.getElementById('ppdbFormStatus').value = p.status;
+                document.getElementById('ppdbFormParent').value = p.parentName;
+                document.getElementById('ppdbFormPhone').value = p.phone;
+            } else {
+                document.getElementById('ppdbModalTitle').innerText = 'Tambah Pendaftar PPDB';
+                document.getElementById('ppdbFormId').value = '';
+                document.getElementById('ppdbFormNisn').value = '';
+                document.getElementById('ppdbFormName').value = '';
+                document.getElementById('ppdbFormOrigin').value = '';
+                document.getElementById('ppdbFormGender').value = 'L';
+                document.getElementById('ppdbFormStatus').value = 'Verifikasi Pending';
+                document.getElementById('ppdbFormParent').value = '';
+                document.getElementById('ppdbFormPhone').value = '';
+            }
+        }
+        function closePpdbModal() { document.getElementById('ppdbModal').classList.add('hidden'); }
+
+        function handleSavePpdbAdmin(e) {
+            e.preventDefault();
+            const id = document.getElementById('ppdbFormId').value;
+            const nisn = document.getElementById('ppdbFormNisn').value;
+            const name = document.getElementById('ppdbFormName').value;
+            const originSchool = document.getElementById('ppdbFormOrigin').value;
+            const gender = document.getElementById('ppdbFormGender').value;
+            const status = document.getElementById('ppdbFormStatus').value;
+            const parentName = document.getElementById('ppdbFormParent').value;
+            const phone = document.getElementById('ppdbFormPhone').value;
+
+            if(id) {
+                const idx = appPpdb.findIndex(i => i.id === id);
+                if(idx !== -1) {
+                    appPpdb[idx] = { ...appPpdb[idx], nisn, name, originSchool, gender, status, parentName, phone };
+                }
+            } else {
+                appPpdb.unshift({
+                    id: 'ppdb-' + Date.now(),
+                    nisn, name, originSchool, gender, parentName, phone,
+                    photo: 'https://placehold.co/100x100/15803d/ffffff?text=Foto',
+                    status
+                });
+            }
+            localStorage.setItem(KEYS.PPDB, JSON.stringify(appPpdb));
+            renderAdminPpdb();
+            renderAllPublicContent();
+            closePpdbModal();
+            showToast('Data PPDB berhasil disimpan!');
+        }
+
+        function updatePpdbStatus(id, status) {
+            const idx = appPpdb.findIndex(p => p.id === id);
+            if(idx !== -1) {
+                appPpdb[idx].status = status;
+                if(status === 'Diterima') {
+                    const p = appPpdb[idx];
+                    if(!appStudents.some(s => s.nisn === p.nisn)) {
+                        appStudents.push({
+                            id: 'std-' + Date.now(),
+                            nisn: p.nisn,
+                            name: p.name,
+                            studentClass: 'Kelas 7',
+                            gender: p.gender,
+                            status: 'Aktif',
+                            photo: p.photo
+                        });
+                        localStorage.setItem(KEYS.STUDENTS, JSON.stringify(appStudents));
+                    }
+                }
+                localStorage.setItem(KEYS.PPDB, JSON.stringify(appPpdb));
+                renderAdminPpdb();
+                renderAllPublicContent();
+                showToast(`Status PPDB diubah menjadi ${status}!`);
+            }
+        }
+
+        function deletePpdb(id) {
+            openDeleteModal(() => {
+                appPpdb = appPpdb.filter(p => p.id !== id);
+                localStorage.setItem(KEYS.PPDB, JSON.stringify(appPpdb));
+                renderAdminPpdb();
+                showToast('Data pendaftar PPDB dihapus.');
+            });
+        }
+
+        function exportPpdbCSV() {
+            let csv = 'NISN,Nama,Asal Sekolah,Gender,Orang Tua,No HP,Status\n';
+            appPpdb.forEach(p => {
+                csv += `"${p.nisn}","${p.name}","${p.originSchool}","${p.gender}","${p.parentName}","${p.phone}","${p.status}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'Data_PPDB_SMPN4Meukek.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Data PPDB berhasil diexport ke CSV!');
+        }
+
+        // ADMIN BERITA
+        function renderAdminNews() {
+            const tbody = document.getElementById('adminNewsTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appNews.map(n => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${n.image}" class="w-10 h-10 object-cover rounded border">
+                        <span class="font-bold text-slate-900 text-xs line-clamp-1">${n.title}</span>
+                    </td>
+                    <td class="p-4 text-xs font-semibold text-brand-700">${n.category}</td>
+                    <td class="p-4 text-xs text-slate-500">${n.date}</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openNewsModal('${n.id}')" class="px-3 py-1 bg-brand-50 text-brand-700 rounded text-xs font-semibold">Edit</button>
+                        <button onclick="deleteNews('${n.id}')" class="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-semibold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openNewsModal(id = null) {
+            document.getElementById('newsModal').classList.remove('hidden');
+            if(id) {
+                const n = appNews.find(i => i.id === id);
+                document.getElementById('newsModalTitle').innerText = 'Edit Berita';
+                document.getElementById('newsFormId').value = n.id;
+                document.getElementById('newsFormTitle').value = n.title;
+                document.getElementById('newsFormCategory').value = n.category;
+                document.getElementById('newsFormAuthor').value = n.author;
+                document.getElementById('newsFormImage').value = n.image;
+                document.getElementById('newsFormImgPrev').src = n.image;
+                document.getElementById('newsFormVideo').value = n.videoUrl || '';
+                document.getElementById('newsFormContent').value = n.content;
+            } else {
+                document.getElementById('newsModalTitle').innerText = 'Tambah Berita';
+                document.getElementById('newsFormId').value = '';
+                document.getElementById('newsFormTitle').value = '';
+                document.getElementById('newsFormCategory').value = 'Pengumuman';
+                document.getElementById('newsFormAuthor').value = 'Admin';
+                document.getElementById('newsFormImage').value = 'https://placehold.co/600x400/15803d/ffffff?text=Berita';
+                document.getElementById('newsFormImgPrev').src = 'https://placehold.co/600x400/15803d/ffffff?text=Berita';
+                document.getElementById('newsFormVideo').value = '';
+                document.getElementById('newsFormContent').value = '';
+            }
+        }
+        function closeNewsModal() { document.getElementById('newsModal').classList.add('hidden'); }
+
+        function handleSaveNews(e) {
+            e.preventDefault();
+            const id = document.getElementById('newsFormId').value;
+            const title = document.getElementById('newsFormTitle').value;
+            const category = document.getElementById('newsFormCategory').value;
+            const author = document.getElementById('newsFormAuthor').value;
+            const image = document.getElementById('newsFormImage').value;
+            const videoUrl = document.getElementById('newsFormVideo').value;
+            const content = document.getElementById('newsFormContent').value;
+            const date = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            if(id) {
+                const idx = appNews.findIndex(i => i.id === id);
+                if(idx !== -1) appNews[idx] = { id, title, category, author, image, videoUrl, content, date };
+            } else {
+                appNews.unshift({ id: 'news-' + Date.now(), title, category, author, image, videoUrl, content, date });
+            }
+            localStorage.setItem(KEYS.NEWS, JSON.stringify(appNews));
+            renderAdminNews();
+            renderAllPublicContent();
+            closeNewsModal();
+            showToast('Berita berhasil disimpan!');
+        }
+
+        function deleteNews(id) {
+            openDeleteModal(() => {
+                appNews = appNews.filter(i => i.id !== id);
+                localStorage.setItem(KEYS.NEWS, JSON.stringify(appNews));
+                renderAdminNews();
+                renderAllPublicContent();
+                showToast('Berita berhasil dihapus.');
+            });
+        }
+
+        // ADMIN GURU
+        function renderAdminTeachers() {
+            const tbody = document.getElementById('adminTeacherTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appTeachers.map(t => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${t.photo}" class="w-10 h-10 rounded-full object-cover border">
+                        <span class="font-bold text-slate-900 text-xs">${t.name}</span>
+                    </td>
+                    <td class="p-4 text-xs font-mono">${t.nip}</td>
+                    <td class="p-4 text-xs font-semibold text-brand-700">${t.subject}</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openTeacherModal('${t.id}')" class="px-3 py-1 bg-brand-50 text-brand-700 rounded text-xs font-semibold">Edit</button>
+                        <button onclick="deleteTeacher('${t.id}')" class="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-semibold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openTeacherModal(id = null) {
+            document.getElementById('teacherModal').classList.remove('hidden');
+            if(id) {
+                const t = appTeachers.find(i => i.id === id);
+                document.getElementById('teacherModalTitle').innerText = 'Edit Guru';
+                document.getElementById('teacherFormId').value = t.id;
+                document.getElementById('teacherFormName').value = t.name;
+                document.getElementById('teacherFormNip').value = t.nip;
+                document.getElementById('teacherFormSubject').value = t.subject;
+                document.getElementById('teacherFormPhoto').value = t.photo;
+                document.getElementById('teacherImgPrev').src = t.photo;
+            } else {
+                document.getElementById('teacherModalTitle').innerText = 'Tambah Guru';
+                document.getElementById('teacherFormId').value = '';
+                document.getElementById('teacherFormName').value = '';
+                document.getElementById('teacherFormNip').value = '';
+                document.getElementById('teacherFormSubject').value = '';
+                document.getElementById('teacherFormPhoto').value = 'https://placehold.co/300x300/15803d/ffffff?text=Guru';
+                document.getElementById('teacherImgPrev').src = 'https://placehold.co/300x300/15803d/ffffff?text=Guru';
+            }
+        }
+        function closeTeacherModal() { document.getElementById('teacherModal').classList.add('hidden'); }
+
+        function handleSaveTeacher(e) {
+            e.preventDefault();
+            const id = document.getElementById('teacherFormId').value;
+            const name = document.getElementById('teacherFormName').value;
+            const nip = document.getElementById('teacherFormNip').value;
+            const subject = document.getElementById('teacherFormSubject').value;
+            const photo = document.getElementById('teacherFormPhoto').value;
+
+            if(id) {
+                const idx = appTeachers.findIndex(i => i.id === id);
+                if(idx !== -1) appTeachers[idx] = { id, name, nip, subject, photo };
+            } else {
+                appTeachers.push({ id: 'tch-' + Date.now(), name, nip, subject, photo });
+            }
+            localStorage.setItem(KEYS.TEACHERS, JSON.stringify(appTeachers));
+            renderAdminTeachers();
+            renderAllPublicContent();
+            closeTeacherModal();
+            showToast('Data guru berhasil disimpan!');
+        }
+
+        function deleteTeacher(id) {
+            openDeleteModal(() => {
+                appTeachers = appTeachers.filter(i => i.id !== id);
+                localStorage.setItem(KEYS.TEACHERS, JSON.stringify(appTeachers));
+                renderAdminTeachers();
+                renderAllPublicContent();
+                showToast('Data guru berhasil dihapus.');
+            });
+        }
+
+        // ADMIN SISWA
+        function renderAdminStudents() {
+            const tbody = document.getElementById('adminStudentTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appStudents.map(s => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${s.photo}" class="w-9 h-9 rounded-full object-cover border">
+                        <span class="font-bold text-slate-900 text-xs">${s.name}</span>
+                    </td>
+                    <td class="p-4 text-xs font-mono">${s.nisn}</td>
+                    <td class="p-4 text-xs font-semibold text-brand-700">${s.studentClass}</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openStudentModal('${s.id}')" class="px-3 py-1 bg-brand-50 text-brand-700 rounded text-xs font-semibold">Edit</button>
+                        <button onclick="deleteStudent('${s.id}')" class="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-semibold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openStudentModal(id = null) {
+            document.getElementById('studentModal').classList.remove('hidden');
+            if(id) {
+                const s = appStudents.find(i => i.id === id);
+                document.getElementById('studentModalTitle').innerText = 'Edit Siswa';
+                document.getElementById('studentFormId').value = s.id;
+                document.getElementById('studentFormName').value = s.name;
+                document.getElementById('studentFormNisn').value = s.nisn;
+                document.getElementById('studentFormClass').value = s.studentClass;
+                document.getElementById('studentFormPhoto').value = s.photo;
+                document.getElementById('studentImgPrev').src = s.photo;
+            } else {
+                document.getElementById('studentModalTitle').innerText = 'Tambah Siswa';
+                document.getElementById('studentFormId').value = '';
+                document.getElementById('studentFormName').value = '';
+                document.getElementById('studentFormNisn').value = '';
+                document.getElementById('studentFormClass').value = 'Kelas 7';
+                document.getElementById('studentFormPhoto').value = 'https://placehold.co/300x300/e2e8f0/1e293b?text=Siswa';
+                document.getElementById('studentImgPrev').src = 'https://placehold.co/300x300/e2e8f0/1e293b?text=Siswa';
+            }
+        }
+        function closeStudentModal() { document.getElementById('studentModal').classList.add('hidden'); }
+
+        function handleSaveStudent(e) {
+            e.preventDefault();
+            const id = document.getElementById('studentFormId').value;
+            const name = document.getElementById('studentFormName').value;
+            const nisn = document.getElementById('studentFormNisn').value;
+            const studentClass = document.getElementById('studentFormClass').value;
+            const photo = document.getElementById('studentFormPhoto').value;
+
+            if(id) {
+                const idx = appStudents.findIndex(i => i.id === id);
+                if(idx !== -1) appStudents[idx] = { id, name, nisn, studentClass, status: 'Aktif', gender: 'L', photo };
+            } else {
+                appStudents.push({ id: 'std-' + Date.now(), name, nisn, studentClass, status: 'Aktif', gender: 'L', photo });
+            }
+            localStorage.setItem(KEYS.STUDENTS, JSON.stringify(appStudents));
+            renderAdminStudents();
+            renderAllPublicContent();
+            closeStudentModal();
+            showToast('Data siswa berhasil disimpan!');
+        }
+
+        function deleteStudent(id) {
+            openDeleteModal(() => {
+                appStudents = appStudents.filter(i => i.id !== id);
+                localStorage.setItem(KEYS.STUDENTS, JSON.stringify(appStudents));
+                renderAdminStudents();
+                renderAllPublicContent();
+                showToast('Data siswa berhasil dihapus.');
+            });
+        }
+
+        // ADMIN LIBRARY
+        function renderAdminLibrary() {
+            const tbody = document.getElementById('adminLibraryTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appLibrary.map(b => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${b.cover}" class="w-8 h-10 object-cover rounded border">
+                        <span class="font-bold text-slate-900 text-xs">${b.title}</span>
+                    </td>
+                    <td class="p-4 text-xs font-semibold text-brand-700">${b.category}</td>
+                    <td class="p-4 text-xs text-slate-500">${b.author}</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="deleteLibrary('${b.id}')" class="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-semibold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        function openLibraryModal() { document.getElementById('libraryModal').classList.remove('hidden'); }
+        function closeLibraryModal() { document.getElementById('libraryModal').classList.add('hidden'); }
+
+        function handleSaveLibrary(e) {
+            e.preventDefault();
+            const title = document.getElementById('libraryFormTitle').value;
+            const category = document.getElementById('libraryFormCategory').value;
+            const author = document.getElementById('libraryFormAuthor').value;
+            const cover = document.getElementById('libraryFormCover').value;
+            const fileUrl = document.getElementById('libraryFormFileUrl').value;
+
+            appLibrary.push({ id: 'lib-' + Date.now(), title, category, author, cover, fileUrl });
+            localStorage.setItem(KEYS.LIBRARY, JSON.stringify(appLibrary));
+            renderAdminLibrary();
+            renderPublicLibrary();
+            closeLibraryModal();
+            showToast('Buku berhasil ditambahkan!');
+        }
+        function deleteLibrary(id) {
+            openDeleteModal(() => {
+                appLibrary = appLibrary.filter(i => i.id !== id);
+                localStorage.setItem(KEYS.LIBRARY, JSON.stringify(appLibrary));
+                renderAdminLibrary();
+                renderPublicLibrary();
+                showToast('Buku dihapus.');
+            });
+        }
+
+        // ADMIN LINKS
+        function renderAdminLinks() {
+            const tbody = document.getElementById('adminLinkTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = appLinks.map(l => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="p-4 font-bold text-slate-900 text-xs">${l.title}</td>
+                    <td class="p-4 text-xs text-blue-600 truncate max-w-xs">${l.url}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="deleteLink('${l.id}')" class="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-semibold">Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Also load social links inputs
+            document.getElementById('socialTiktokInput').value = socialLinks.tiktok || '';
+            document.getElementById('socialYoutubeInput').value = socialLinks.youtube || '';
+            document.getElementById('socialIgInput').value = socialLinks.instagram || '';
+        }
+
+        function handleSaveSocialLinks(e) {
+            e.preventDefault();
+            socialLinks.tiktok = document.getElementById('socialTiktokInput').value;
+            socialLinks.youtube = document.getElementById('socialYoutubeInput').value;
+            socialLinks.instagram = document.getElementById('socialIgInput').value;
+            localStorage.setItem('smpn4_social_v2', JSON.stringify(socialLinks));
+            renderAllPublicContent();
+            showToast('Tautan media sosial resmi berhasil diperbarui!');
+        }
+
+        function openLinkModal() { document.getElementById('linkModal').classList.remove('hidden'); }
+        function closeLinkModal() { document.getElementById('linkModal').classList.add('hidden'); }
+
+        function handleSaveLink(e) {
+            e.preventDefault();
+            const title = document.getElementById('linkFormTitle').value;
+            const url = document.getElementById('linkFormUrl').value;
+            appLinks.push({ id: 'lnk-' + Date.now(), title, url });
+            localStorage.setItem(KEYS.LINKS, JSON.stringify(appLinks));
+            renderAdminLinks();
+            renderPublicLinks();
+            closeLinkModal();
+            showToast('Tautan aplikasi berhasil ditambahkan!');
+        }
+        function deleteLink(id) {
+            openDeleteModal(() => {
+                appLinks = appLinks.filter(i => i.id !== id);
+                localStorage.setItem(KEYS.LINKS, JSON.stringify(appLinks));
+                renderAdminLinks();
+                renderPublicLinks();
+                showToast('Tautan dihapus.');
+            });
+        }
+
+        // ADMIN PROFIL & SETTINGS
+        function loadAdminProfileForm() {
+            document.getElementById('setSchoolName').value = profileData.schoolName;
+            document.getElementById('setNpsn').value = profileData.npsn;
+            document.getElementById('setPhone').value = profileData.phone;
+            document.getElementById('setSchoolEmail').value = profileData.email;
+            document.getElementById('setLogoUrl').value = profileData.logoUrl;
+            document.getElementById('setLogoPreview').src = profileData.logoUrl;
+            document.getElementById('setHeadPhoto').value = profileData.headmasterPhoto;
+            document.getElementById('setHeadPhotoPrev').src = profileData.headmasterPhoto;
+            document.getElementById('setHeadmasterName').value = profileData.headmasterName;
+            document.getElementById('setWelcomeSpeech').value = profileData.welcomeSpeech;
+            document.getElementById('setAddress').value = profileData.address;
+            document.getElementById('setVision').value = profileData.vision;
+            document.getElementById('setMission').value = profileData.mission;
+            document.getElementById('setHistory').value = profileData.history;
+            document.getElementById('setPpdbReq').value = profileData.ppdbRequirements || '';
+        }
+
+        function handleSaveProfile(e) {
+            e.preventDefault();
+            profileData.schoolName = document.getElementById('setSchoolName').value;
+            profileData.npsn = document.getElementById('setNpsn').value;
+            profileData.phone = document.getElementById('setPhone').value;
+            profileData.email = document.getElementById('setSchoolEmail').value;
+            profileData.logoUrl = document.getElementById('setLogoUrl').value;
+            profileData.headmasterPhoto = document.getElementById('setHeadPhoto').value;
+            profileData.headmasterName = document.getElementById('setHeadmasterName').value;
+            profileData.welcomeSpeech = document.getElementById('setWelcomeSpeech').value;
+            profileData.address = document.getElementById('setAddress').value;
+            profileData.vision = document.getElementById('setVision').value;
+            profileData.mission = document.getElementById('setMission').value;
+            profileData.history = document.getElementById('setHistory').value;
+            profileData.ppdbRequirements = document.getElementById('setPpdbReq').value;
+
+            localStorage.setItem(KEYS.PROFILE, JSON.stringify(profileData));
+            renderAllPublicContent();
+            showToast('Pengaturan profil dan identitas sekolah diperbarui!');
+        }
+
+        // ADMIN ACCOUNT CREDENTIALS
+        function loadAdminAccountForm() {
+            const savedAuth = JSON.parse(localStorage.getItem(KEYS.ADMIN_AUTH));
+            document.getElementById('setAdminEmail').value = savedAuth.email || 'admin@smpn4meukek.sch.id';
+            document.getElementById('setAdminUser').value = savedAuth.username || 'admin';
+            document.getElementById('setAdminPass').value = '';
+            document.getElementById('setAdminShowLogin').checked = savedAuth.showLoginButton !== false;
+        }
+
+        function handleSaveAccount(e) {
+            e.preventDefault();
+            const newEmail = document.getElementById('setAdminEmail').value;
+            const newU = document.getElementById('setAdminUser').value.trim();
+            const newP = document.getElementById('setAdminPass').value.trim();
+            const showLogin = document.getElementById('setAdminShowLogin').checked;
+
+            let authData = JSON.parse(localStorage.getItem(KEYS.ADMIN_AUTH));
+            authData.email = newEmail;
+            authData.showLoginButton = showLogin;
+            if(newU) authData.username = newU;
+            if(newP) authData.password = newP;
+            localStorage.setItem(KEYS.ADMIN_AUTH, JSON.stringify(authData));
+            loadState();
+            showToast('Kredensial dan akun keamanan admin berhasil diperbarui!');
+        }
+    </script>
+</body>
+</html>
